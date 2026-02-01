@@ -1,0 +1,24 @@
+import { UserModel,UserDocument } from "../models/users.model";
+
+export class UserRepository{
+    static async createUser(
+        username: string,
+        email: string,
+        hashedPassword: string
+    ): Promise<UserDocument>{
+        return UserModel.create({
+            email,
+            username,
+            password: hashedPassword
+        });
+    }
+    
+    static async findUserByEmail(email: string): Promise<UserDocument | null>{
+    return UserModel.findOne({email});
+}
+
+    static async findUserById(userId: string): Promise<UserDocument | null>{
+        return UserModel.findById(userId);
+    }
+}
+

@@ -1,4 +1,18 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, Document } from "mongoose";
+
+export interface UserDocument extends Document{
+    username: string;
+    password: string;
+    email: string;
+    spendableTokens: number;
+    holdings: {
+        stockId: Types.ObjectId;
+        quantity: number;
+    }[];
+    role: "USER" | "ADMIN";
+    createdAt: Date;
+    updatedAt: Date;
+}
 
 const HoldingSchema = new Schema(
     {
@@ -9,15 +23,15 @@ const HoldingSchema = new Schema(
     {_id: false}
 )
 
-const userSchema = new Schema(
+const userSchema = new Schema<UserDocument>(
     {
-        username: { type: String, required: true },
+        username: { type: String, required: true, trim: true },
         email: {type: String, required: true, unique: true, lowercase: true, trim: true},
-        passwordHash: { type: String, required: true, select: false },
+        password: { type: String, required: true, select: false },
         holdings:  { type: [HoldingSchema], default: [] },
-        role: { type: String, enum: ['user', 'admin'], default: 'user' },
+        role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
         spendableTokens: {type: Number, default: 500, min: 0}
     },
     { timestamps: true}
 )
-export const User = model("User", userSchema);
+export const UserModel = model("User", userSchema);
