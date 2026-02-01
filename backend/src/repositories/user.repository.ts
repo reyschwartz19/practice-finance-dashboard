@@ -14,7 +14,7 @@ export class UserRepository{
     }
     
     static async findUserByEmail(email: string): Promise<UserDocument | null>{
-    return UserModel.findOne({email});
+    return UserModel.findOne({email}).select('+password');
 }
 
     static async findUserById(userId: string): Promise<UserDocument | null>{
