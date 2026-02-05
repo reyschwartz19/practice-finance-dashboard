@@ -10,6 +10,7 @@ export interface UserDocument extends Document{
         quantity: number;
     }[];
     role: "USER" | "ADMIN";
+    refreshToken?: string| null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -30,7 +31,8 @@ const userSchema = new Schema<UserDocument>(
         password: { type: String, required: true, select: false },
         holdings:  { type: [HoldingSchema], default: [] },
         role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
-        spendableTokens: {type: Number, default: 500, min: 0}
+        spendableTokens: {type: Number, default: 500, min: 0},
+        refreshToken: { type: String, default: null }
     },
     { timestamps: true}
 )

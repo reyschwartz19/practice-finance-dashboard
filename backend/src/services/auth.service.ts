@@ -38,9 +38,17 @@ export class AuthService{
             process.env.JWT_SECRET as string,
             { expiresIn: "15m"}
         );
+        const refreshToken = jwt.sign(
+            {userId: user._id},
+            process.env.REFRESH_TOKEN as string,
+            {expiresIn: "7d"}
+        );
+
+        await UserRepository.saveRefreshToken(user._id.toString(), refreshToken);
 
         return {
             token,
+            refreshToken,
             user: {
                 id: user._id,
                 username: user.username,
@@ -49,4 +57,8 @@ export class AuthService{
             }
         }
     }
+    static async logout(userId: string){
+        await UserRepository.saveRefreshToken(userId, null);
+    }
+
 }

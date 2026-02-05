@@ -20,5 +20,9 @@ export class UserRepository{
     static async findUserById(userId: string): Promise<UserDocument | null>{
         return UserModel.findById(userId);
     }
+
+    static async saveRefreshToken(userId: string, refreshToken: string | null): Promise<UserDocument | null>{
+        return UserModel.findByIdAndUpdate(userId, {refreshToken: refreshToken}, {new: true});
+    }
 }
 
